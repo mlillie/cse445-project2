@@ -23,14 +23,25 @@ namespace Project2
             this.buffer = buffer;
         }
 
-        public void CreateBookOrder(int senderId, int receiverId, double price)
+        public void BookstoreFunction()
+        {
+            while(Program.isRunning())
+            {
+                Thread.Sleep(random.Next(1000, 3000));
+                string senderId = Thread.CurrentThread.Name;
+                CreateBookOrder(senderId);
+            }
+        }
+
+        public void CreateBookOrder(string senderId)
         {
             OrderObject order = new OrderObject();
             order.SenderId = senderId;
-            order.ReceiverId = receiverId;
+            //order.ReceiverId = receiverId; // This can be set when the publisher actually receivs the order
             order.Amount = random.Next(1, 5); //TODO amount has to change dynamically based on needs?
             order.CardNo = random.Next(100, 1000); //TODO?
-            order.UnitPrice = price;
+            //order.UnitPrice = price; TODO set the price when the publisher recieves the order from the buffer so,
+            // it can update the price counter and possibly change the price
 
             Console.WriteLine("Order has been created at {0} by sender {1}.", DateTime.Now.ToString("hh:mm:ss"), 
                 senderId);
@@ -38,6 +49,11 @@ namespace Project2
             //Encode and send to the buffer here
            // string encodedOrder = Encoding.encode(order);
             //buffer.WriteToBuffer(encodedOrder);
+        }
+
+        public void BookOnSale()
+        {
+
         }
     }
 }
