@@ -28,14 +28,14 @@ namespace Project2
             while(Program.isRunning())
             {
                 Thread.Sleep(random.Next(1000, 3000));
-                string senderId = Thread.CurrentThread.Name;
+                string senderId = Thread.CurrentThread.Name; //Thonk?
                 CreateBookOrder(senderId);
             }
         }
 
         public void CreateBookOrder(string senderId)
         {
-            OrderObject order = new OrderObject();
+            OrderClass order = new OrderClass();
             order.SenderId = senderId;
             //order.ReceiverId = receiverId; // This can be set when the publisher actually receivs the order
             order.Amount = random.Next(1, 5); //TODO amount has to change dynamically based on needs?
@@ -47,8 +47,8 @@ namespace Project2
                 senderId);
 
             //Encode and send to the buffer here
-           // string encodedOrder = Encoding.encode(order);
-            //buffer.WriteToBuffer(encodedOrder);
+           string encodedOrder = Cipher.encoder(order);
+           buffer.WriteToBuffer(encodedOrder);
         }
 
         public void BookOnSale()

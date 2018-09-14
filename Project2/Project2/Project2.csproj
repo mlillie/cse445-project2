@@ -46,6 +46,10 @@
     <Compile Include="BookStore.cs" />
     <Compile Include="MultiCellBuffer.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Calendar.cs" />
+    <Compile Include="Publisher.cs" />
+    <Compile Include="Cipher.cs" />
+    <Compile Include="OrderClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

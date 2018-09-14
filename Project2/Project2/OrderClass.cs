@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 namespace Project2
 {
     // Created by Jacqueline Fonseca on 09/08/2018
+    // Changed senderId and receiverId to be strings
     class OrderClass
     {
-        private int senderId, cardNo, amount, receiverID;
+        private int cardNo, amount;
+        private string senderId, receiverId;
         private double unit_price;
 
-        public int SenderId
+        public string SenderId
         {
             get { return senderId; }
             set { senderId = value;  }
@@ -32,10 +34,10 @@ namespace Project2
             get { return unit_price; }
             set { unit_price = value; }
         }
-        public int ReceiverID
+        public string ReceiverId
         {
-            get { return receiverID; }
-            set { receiverID = value; }
+            get { return receiverId; }
+            set { receiverId = value; }
         }
     }
 }

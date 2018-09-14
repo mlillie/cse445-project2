@@ -16,9 +16,23 @@ namespace Project2
         //The bookstore threads associated with the entire program.
         private static Thread[] bookstores;
 
+        //The number of bookstore threads
+        private const int NUMBER_OF_BOOKSTORES = 5;
+
+        //The number of publisher threads
+        private const int NUMBER_OF_PUBLISHERS = 2;
 
         static void Main(string[] args)
         {
+            //Create the bookstore and create all the threads associated with the bookstore
+            BookStore bookstore = new BookStore(buffer);
+
+            bookstores = new Thread[NUMBER_OF_BOOKSTORES];
+            for (int i = 0; i < NUMBER_OF_BOOKSTORES; i ++)
+            {
+                bookstores[i] = new Thread(new ThreadStart(bookstore.BookstoreFunction));
+                bookstores[i].Start();
+            }
         }
 
         public static Thread[] getPublishers()
