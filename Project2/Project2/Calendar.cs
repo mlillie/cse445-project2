@@ -23,13 +23,13 @@ namespace Project2
 
             // Will be used to increase / decrease the final price depending on how many
             // books were ordered.
-            prices[0][1] = -.2;
+            prices[0][1] = .2;
             prices[1][1] = .053;
             prices[2][1] = 152;
             prices[3][1] = .1;
             prices[4][1] = .13;
-            prices[5][1] = -.18;
-            prices[6][1] = -.18;
+            prices[5][1] = .18;
+            prices[6][1] = .18;
             return Tuple.Create(prices[day_of_the_week][0], prices[day_of_the_week][1]);
         }
 
