@@ -22,16 +22,46 @@ namespace Project2
         //The number of publisher threads
         private const int NUMBER_OF_PUBLISHERS = 2;
 
+        private static Random random = new Random();
+
         static void Main(string[] args)
         {
             //Create the bookstore and create all the threads associated with the bookstore
-            BookStore bookstore = new BookStore(buffer);
+            /*BookStore bookstore = new BookStore(buffer);
 
             bookstores = new Thread[NUMBER_OF_BOOKSTORES];
             for (int i = 0; i < NUMBER_OF_BOOKSTORES; i ++)
-            {
+             {
                 bookstores[i] = new Thread(new ThreadStart(bookstore.BookstoreFunction));
+                bookstores[i].Name = "Bookstore #" + i.ToString();
                 bookstores[i].Start();
+            }*/
+
+            Thread thread = new Thread(new ThreadStart(WriteToBuffer));
+            Thread thread2 = new Thread(new ThreadStart(ReadFromBuffer));
+
+            thread.Start();
+            thread2.Start();
+        }
+
+        private static void WriteToBuffer()
+        {
+            while(running)
+            {
+                Thread.Sleep(250);
+                string val = "Writing: "+ random.NextDouble().ToString() + " value";
+                buffer.WriteToBuffer(val);
+                Console.WriteLine(val);
+            }
+        }
+
+        private static void ReadFromBuffer()
+        {
+            while (running)
+            {
+                Thread.Sleep(random.Next(500, 3500));
+                string val = "Reading: " + buffer.ReadFromBuffer() + " value";
+                Console.WriteLine(val);
             }
         }
 

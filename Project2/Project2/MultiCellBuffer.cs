@@ -56,6 +56,7 @@ namespace Project2
 
         public string ReadFromBuffer()
         {
+
             readSemaphore.WaitOne();
             string value = null;
             lock(BUFFER_LOCK) // Lock the buffer because we are now attempting to read from it

@@ -20,9 +20,7 @@ namespace Project2
         {
             base_price = (c.Base_Price(c.Day())).Item1;
             discount = (c.Base_Price(c.Day()).Item2);
-
-            Cipher cipher = new Cipher();
-            order = cipher.decoder(s);
+            order = Cipher.decoder(s);
 
 
         }
