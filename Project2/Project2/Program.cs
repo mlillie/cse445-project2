@@ -5,10 +5,12 @@ namespace Project2
 {
     class Program
     {
+
+        //Moved it to here
+        public delegate void PriceCutEvent(int publisherId, double newPrice);
+
         // We can pass this to the constructor of bookstore and publisher so they can use it
         private static MultiCellBuffer buffer;
-
-        private static Boolean running = true; // Necessary?
 
         //The publisher threads associated with the entire program.
         private static Thread[] publishers;
@@ -24,22 +26,29 @@ namespace Project2
 
         private static Random random = new Random();
 
+        private static Boolean[] publishersRunning;
+
+
         static void Main(string[] args)
         {
+            publishersRunning = new Boolean[NUMBER_OF_PUBLISHERS];
+
             buffer = new MultiCellBuffer();
-            //Create the publisher and create all the threads associated with the publisher
-            Publisher publisher = new Publisher(buffer);
+
+            Publisher publisher;
+            BookStore bookstore = new BookStore(buffer);
+
+            Publisher.priceCut += new PriceCutEvent(bookstore.BookOnSale);
 
             publishers = new Thread[NUMBER_OF_PUBLISHERS];
             for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
             {
+                publisher = new Publisher(buffer, i);
                 publishers[i] = new Thread(new ThreadStart(publisher.PublisherFunction));
                 publishers[i].Name = "Publisher #" + i.ToString();
                 publishers[i].Start();
+                publishersRunning[i] = true;
             }
-
-            //Create the bookstore and create all the threads associated with the bookstore
-            BookStore bookstore = new BookStore(buffer);
 
             bookstores = new Thread[NUMBER_OF_BOOKSTORES];
             for (int i = 0; i < NUMBER_OF_BOOKSTORES; i ++)
@@ -50,27 +59,6 @@ namespace Project2
             }
 
 
-        }
-
-        private static void WriteToBuffer()
-        {
-            while(running)
-            {
-                Thread.Sleep(250);
-                string val = "Writing: "+ random.NextDouble().ToString() + " value";
-                buffer.WriteToBuffer(val);
-                Console.WriteLine(val);
-            }
-        }
-
-        private static void ReadFromBuffer()
-        {
-            while (running)
-            {
-                Thread.Sleep(random.Next(500, 3500));
-                string val = "Reading: " + buffer.ReadFromBuffer() + " value";
-                Console.WriteLine(val);
-            }
         }
 
         public static Thread[] getPublishers()
@@ -85,12 +73,19 @@ namespace Project2
 
         public static Boolean isRunning()
         {
-            return running; 
+            for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
+            {
+                if (publishersRunning[i])
+                    return true;
+            }
+
+            Console.WriteLine("GOT FALSE");
+            return false;
         }
 
-        public static void setRunning(Boolean val)
+        public static void setRunning(int publisherId, Boolean value)
         {
-            running = val;
+            publishersRunning[publisherId] = value;
         }
     }
 }

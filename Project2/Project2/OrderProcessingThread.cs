@@ -11,7 +11,6 @@ namespace Project2
         public static double tax = 0.083;
         public OrderProcessingThread()
         {
- 
         }
         public static void OPT(OrderClass order)
         {

@@ -32,7 +32,7 @@ namespace Project2
                 CreateBookOrder(senderId);
             }
 
-            Console.WriteLine("TERMINATING");
+            Console.WriteLine("TERMINATING: " + Thread.CurrentThread.Name);
         }
 
         public void CreateBookOrder(string senderId)
@@ -49,14 +49,15 @@ namespace Project2
 
             //Encode and send to the buffer here
            string encodedOrder = Cipher.encoder(order);
+            Console.WriteLine("Before write buffer: " + Thread.CurrentThread.Name);
            buffer.WriteToBuffer(encodedOrder);
-           Console.WriteLine("Order has been created at {0} by sender {1}.", DateTime.Now.ToString("hh:mm:ss"),
-     senderId);
+           Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by sender " + senderId + ".");
         }
 
-        public void BookOnSale()
+        public void BookOnSale(int publisherId, double price)
         {
-
+            Console.WriteLine("A SALE IS HAPPENING FROM PUBLISHER #"+ publisherId.ToString() 
+                +" WITH A NEW LOW PRICE OF: $" + price.ToString("0.00"));
         }
     }
 }
