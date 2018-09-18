@@ -6,7 +6,7 @@ namespace Project2
     class Program
     {
         // We can pass this to the constructor of bookstore and publisher so they can use it
-        private static MultiCellBuffer buffer = new MultiCellBuffer();
+        private static MultiCellBuffer buffer;
 
         private static Boolean running = true; // Necessary?
 
@@ -26,22 +26,30 @@ namespace Project2
 
         static void Main(string[] args)
         {
+            buffer = new MultiCellBuffer();
+            //Create the publisher and create all the threads associated with the publisher
+            Publisher publisher = new Publisher(buffer);
+
+            publishers = new Thread[NUMBER_OF_PUBLISHERS];
+            for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
+            {
+                publishers[i] = new Thread(new ThreadStart(publisher.PublisherFunction));
+                publishers[i].Name = "Publisher #" + i.ToString();
+                publishers[i].Start();
+            }
+
             //Create the bookstore and create all the threads associated with the bookstore
-            /*BookStore bookstore = new BookStore(buffer);
+            BookStore bookstore = new BookStore(buffer);
 
             bookstores = new Thread[NUMBER_OF_BOOKSTORES];
             for (int i = 0; i < NUMBER_OF_BOOKSTORES; i ++)
-             {
+            {
                 bookstores[i] = new Thread(new ThreadStart(bookstore.BookstoreFunction));
                 bookstores[i].Name = "Bookstore #" + i.ToString();
                 bookstores[i].Start();
-            }*/
+            }
 
-            Thread thread = new Thread(new ThreadStart(WriteToBuffer));
-            Thread thread2 = new Thread(new ThreadStart(ReadFromBuffer));
 
-            thread.Start();
-            thread2.Start();
         }
 
         private static void WriteToBuffer()
@@ -78,6 +86,11 @@ namespace Project2
         public static Boolean isRunning()
         {
             return running; 
+        }
+
+        public static void setRunning(Boolean val)
+        {
+            running = val;
         }
     }
 }

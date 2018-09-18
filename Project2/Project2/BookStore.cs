@@ -31,6 +31,8 @@ namespace Project2
                 string senderId = Thread.CurrentThread.Name; //Thonk?
                 CreateBookOrder(senderId);
             }
+
+            Console.WriteLine("TERMINATING");
         }
 
         public void CreateBookOrder(string senderId)
@@ -40,15 +42,16 @@ namespace Project2
             //order.ReceiverId = receiverId; // This can be set when the publisher actually receivs the order
             order.Amount = random.Next(1, 5); //TODO amount has to change dynamically based on needs?
             order.CardNo = random.Next(100, 1000); //TODO?
+            order.ReceiverId = "TODO";
+            order.Unit_Price = 0.0;
             //order.UnitPrice = price; TODO set the price when the publisher recieves the order from the buffer so,
             // it can update the price counter and possibly change the price
-
-            Console.WriteLine("Order has been created at {0} by sender {1}.", DateTime.Now.ToString("hh:mm:ss"), 
-                senderId);
 
             //Encode and send to the buffer here
            string encodedOrder = Cipher.encoder(order);
            buffer.WriteToBuffer(encodedOrder);
+           Console.WriteLine("Order has been created at {0} by sender {1}.", DateTime.Now.ToString("hh:mm:ss"),
+     senderId);
         }
 
         public void BookOnSale()

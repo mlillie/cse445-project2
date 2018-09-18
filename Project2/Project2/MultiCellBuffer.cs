@@ -31,7 +31,7 @@ namespace Project2
             {
                 while (currentBufferSize == MAXIMUM_BUFFER_SIZE)
                 {
-                    Console.WriteLine("Buffer is FULL");
+                    //Console.WriteLine("Buffer is FULL");
                     Monitor.Wait(BUFFER_LOCK); // The buffer is at capacity so wait
                 }
 
@@ -63,7 +63,7 @@ namespace Project2
             {
                 while (currentBufferSize == 0)
                 {
-                    Console.WriteLine("Buffer is EMPTY");
+                    //Console.WriteLine("Buffer is EMPTY");
                     Monitor.Wait(BUFFER_LOCK); // The buffer is empty so wait
                 }
 

@@ -12,6 +12,16 @@ namespace Project2
 
         public Tuple<double, double> Base_Price(int day_of_the_week)
         {
+
+            prices = new double[7][];
+            prices[0] = new double[2];
+            prices[1] = new double[2];
+            prices[2] = new double[2];
+            prices[3] = new double[2];
+            prices[4] = new double[2];
+            prices[5] = new double[2];
+            prices[6] = new double[2];
+
             // Base price for price per book for each day of the week
             prices[0][0] = 132;
             prices[1][0] = 73;
@@ -35,7 +45,7 @@ namespace Project2
 
         public int Day()
         {
-             return (int)DateTime.Now.DayOfWeek;
+            return (int)DateTime.Now.DayOfWeek;
         }
     }
 
