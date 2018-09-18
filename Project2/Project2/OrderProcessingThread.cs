@@ -11,14 +11,14 @@ namespace Project2
         public static double tax = 0.083;
         public OrderProcessingThread()
         {
-            //tax = .083;
-            //We never actually instantiate this class so we can just set the tax up der ^
+ 
         }
         public static void OPT(OrderClass order)
         {
             if (order.CardNo < 1000 && order.CardNo > 100)
             {
-                double total_amount = order.Unit_Price * order.Amount * tax;
+                double taxed = order.Unit_Price * tax;
+                double total_amount = (taxed + order.Unit_Price) * order.Amount;
                 Console.WriteLine("Order: " + order.SenderId + "; " + order.ReceiverId + "; totaled $" + total_amount.ToString("0.00"));
             }
         }

@@ -14,7 +14,7 @@ namespace Project2
 
     class Publisher
     {
-        Calendar c = new Calendar();
+        private Calendar c = new Calendar();
         private MultiCellBuffer buffer;
         public static event PriceCutEvent priceCut;
 
@@ -70,6 +70,7 @@ namespace Project2
                     Monitor.Exit(buffer);
                 }
             }
+            Console.Write(Thread.CurrentThread.Name.ToString() + " is terminating.\n");
             Program.setRunning(false);
         }
 
@@ -77,13 +78,26 @@ namespace Project2
         {
             OrderClass order = Project2.Cipher.decoder(s);
 
-            double final_price = base_price * discount;
-            // Will change the price
+            double final_price = base_price + (base_price * discount);
+            
+            // Will change the price to discounted one
             if (order.Amount % 2 == 0 && order.Amount > 10)
                 final_price = final_price + (order.Amount * discount);
             else
                 final_price = final_price - (order.Amount * discount);
+
+            // Checks whether the price is too low or high
+            while (final_price < 50)
+            {
+                final_price += 5;
+            }
+            while(final_price > 200)
+            {
+                final_price -= 3;
+            }   
+
             return final_price;
+            
         }
     }
 }
