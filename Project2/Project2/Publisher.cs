@@ -38,11 +38,11 @@ namespace Project2
         public void PublisherFunction()
         {
 
-            while (p < 5)
+            while (p < 2)
             {
                 Thread.Sleep(2000); // Should make this randomly probably
-
-                Monitor.Enter(buffer);
+   
+               // Monitor.Enter(buffer);
                 try
                 {
                     string s = buffer.ReadFromBuffer();
@@ -52,11 +52,11 @@ namespace Project2
                         new_price = PricingModel(s);
                         if (new_price < past_price)
                         {
-                            if(priceCut != null) //Added null check
-                                priceCut(publisherId, new_price);
                             p++;
                             Console.WriteLine("Publisher # " + publisherId + "; P IS : " + p.ToString());
                             past_price = new_price;
+                            if (priceCut != null) //Added null check
+                                priceCut(publisherId, new_price);
                         }
                         else
                             past_price = new_price;
@@ -71,7 +71,7 @@ namespace Project2
                 }
                 finally
                 {
-                    Monitor.Exit(buffer);
+                   // Monitor.Exit(buffer);
                 }
             }
             Console.Write(Thread.CurrentThread.Name.ToString() + " is terminating.\n");

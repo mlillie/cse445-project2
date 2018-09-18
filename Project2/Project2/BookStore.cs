@@ -25,11 +25,17 @@ namespace Project2
 
         public void BookstoreFunction()
         {
-            while(Program.isRunning())
+            while (true)
             {
-                Thread.Sleep(random.Next(1000, 3000));
-                string senderId = Thread.CurrentThread.Name; //Thonk?
-                CreateBookOrder(senderId);
+                if (Program._stopper.WaitOne(random.Next(1000, 2500), false))
+                {
+                    break;
+                }
+                if(!buffer.isFull())
+                {
+                    string senderId = Thread.CurrentThread.Name;
+                    CreateBookOrder(senderId);
+                }
             }
 
             Console.WriteLine("TERMINATING: " + Thread.CurrentThread.Name);
@@ -49,7 +55,7 @@ namespace Project2
 
             //Encode and send to the buffer here
            string encodedOrder = Cipher.encoder(order);
-            Console.WriteLine("Before write buffer: " + Thread.CurrentThread.Name);
+           Console.WriteLine("Before write buffer: " + Thread.CurrentThread.Name);
            buffer.WriteToBuffer(encodedOrder);
            Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by sender " + senderId + ".");
         }

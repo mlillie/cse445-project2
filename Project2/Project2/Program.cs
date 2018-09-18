@@ -28,6 +28,7 @@ namespace Project2
 
         private static Boolean[] publishersRunning;
 
+        public static ManualResetEvent _stopper = new ManualResetEvent(false);
 
         static void Main(string[] args)
         {
@@ -71,21 +72,23 @@ namespace Project2
             return bookstores;
         }
 
-        public static Boolean isRunning()
+        private static Boolean isRunning()
         {
             for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
             {
                 if (publishersRunning[i])
                     return true;
             }
-
-            Console.WriteLine("GOT FALSE");
             return false;
         }
 
         public static void setRunning(int publisherId, Boolean value)
         {
             publishersRunning[publisherId] = value;
+            if(!isRunning())
+            {
+                _stopper.Set();
+            }
         }
     }
 }
