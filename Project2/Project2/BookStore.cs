@@ -65,5 +65,10 @@ namespace Project2
             Console.WriteLine("A SALE IS HAPPENING FROM PUBLISHER #"+ publisherId.ToString() 
                 +" WITH A NEW LOW PRICE OF: $" + price.ToString("0.00"));
         }
+
+        public static void Confirmation(OrderClass order)
+        {
+            Console.Write("Order from " + order.ReceiverId + " with " + order.Amount + " book(s) has been approved.\n");
+        }       
     }
 }

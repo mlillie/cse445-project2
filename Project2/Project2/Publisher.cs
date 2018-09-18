@@ -38,7 +38,7 @@ namespace Project2
         public void PublisherFunction()
         {
 
-            while (p < 2)
+            while (p < 5)
             {
                 Thread.Sleep(2000); // Should make this randomly probably
    
@@ -54,9 +54,17 @@ namespace Project2
                         {
                             p++;
                             Console.WriteLine("Publisher # " + publisherId + "; P IS : " + p.ToString());
+                            Console.Write(">> Price decreased for Publisher # " + publisherId + " from $" + past_price.ToString("0.00") +
+                                " to $" + new_price.ToString("0.00") + "\n");
                             past_price = new_price;
                             if (priceCut != null) //Added null check
                                 priceCut(publisherId, new_price);
+                        }
+                        else if (new_price > past_price)
+                        {
+                            Console.Write(">> Price increased for Publisher # " + publisherId + " from $" + past_price.ToString("0.00") +
+                                " to $" + new_price.ToString("0.00") + "\n");
+                            past_price = new_price;
                         }
                         else
                             past_price = new_price;

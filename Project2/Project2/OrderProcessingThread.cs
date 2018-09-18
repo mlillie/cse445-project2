@@ -19,6 +19,8 @@ namespace Project2
                 double taxed = order.Unit_Price * tax;
                 double total_amount = (taxed + order.Unit_Price) * order.Amount;
                 Console.WriteLine("Order: " + order.SenderId + "; " + order.ReceiverId + "; totaled $" + total_amount.ToString("0.00"));
+
+                Project2.BookStore.Confirmation(order);
             }
         }
     }
