@@ -20,8 +20,8 @@ namespace Project2
         private double base_price = 0; //price of books from pricemodel
         private double discount = 0; //discount to be used for that day
         private int p; // number of price cuts
-        private double past_price = 0;
-        private double new_price = 0;
+        private static double past_price;
+        private static double new_price;
         private int publisherId;
 
         public Publisher(MultiCellBuffer buffer, int publisherId)

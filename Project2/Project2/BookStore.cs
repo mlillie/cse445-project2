@@ -17,6 +17,10 @@ namespace Project2
 
         //The buffer that is being passed to this by the main program
         private MultiCellBuffer buffer;
+        static Calendar c = new Calendar();
+
+        private static int total_books = Convert.ToInt32((c.Base_Price(c.Day())).Item3);
+        private static int count_confirmations = 0;
 
         public BookStore(MultiCellBuffer buffer)
         {
@@ -46,7 +50,14 @@ namespace Project2
             OrderClass order = new OrderClass();
             order.SenderId = senderId;
             //order.ReceiverId = receiverId; // This can be set when the publisher actually receivs the order
-            order.Amount = random.Next(1, 5); //TODO amount has to change dynamically based on needs?
+            
+       
+            int temp = total_books - count_confirmations;
+            order.Amount = (temp / 15);
+            total_books -= order.Amount;
+        
+            //order.Amount =  (200-count_confirmations);//TODO amount has to change dynamically based on needs?
+            Console.Write("BOOKS:::::: " + order.Amount);
             order.CardNo = random.Next(100, 1000); //TODO?
             order.ReceiverId = "TODO";
             order.Unit_Price = 0.0;
@@ -69,6 +80,9 @@ namespace Project2
         public static void Confirmation(OrderClass order)
         {
             Console.Write("Order from " + order.ReceiverId + " with " + order.Amount + " book(s) has been approved.\n");
-        }       
+            count_confirmations++;
+            Console.Write(count_confirmations);
+        }      
+        
     }
 }

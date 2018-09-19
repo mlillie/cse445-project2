@@ -10,17 +10,17 @@ namespace Project2
     {
         private double[][] prices;
 
-        public Tuple<double, double> Base_Price(int day_of_the_week)
+        public Tuple<double, double, double> Base_Price(int day_of_the_week)
         {
 
             prices = new double[7][];
-            prices[0] = new double[2];
-            prices[1] = new double[2];
-            prices[2] = new double[2];
-            prices[3] = new double[2];
-            prices[4] = new double[2];
-            prices[5] = new double[2];
-            prices[6] = new double[2];
+            prices[0] = new double[3];
+            prices[1] = new double[3];
+            prices[2] = new double[3];
+            prices[3] = new double[3];
+            prices[4] = new double[3];
+            prices[5] = new double[3];
+            prices[6] = new double[3];
 
             // Base price for price per book for each day of the week
             prices[0][0] = 132;
@@ -40,7 +40,16 @@ namespace Project2
             prices[4][1] = .013;
             prices[5][1] = .018;
             prices[6][1] = .018;
-            return Tuple.Create(prices[day_of_the_week][0], prices[day_of_the_week][1]);
+
+            prices[0][2] = 250;
+            prices[1][2] = 200;
+            prices[2][2] = 230;
+            prices[3][2] = 300;
+            prices[4][2] = 275;
+            prices[5][2] = 280;
+            prices[6][2] = 280;
+        
+           return Tuple.Create(prices[day_of_the_week][0], prices[day_of_the_week][1], prices[day_of_the_week][2]);
         }
 
         public int Day()
