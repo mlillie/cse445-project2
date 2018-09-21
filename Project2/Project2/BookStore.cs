@@ -19,7 +19,7 @@ namespace Project2
         private int total_books;
 
         //The current amount of confirmed orders.
-        private static int count_confirmations = 0;
+        public static int count_confirmations = 0;
 
         //This is for accessing the count_confirmations integer
         private static object COUNT_OBJECT_LOCK = new object();
@@ -32,12 +32,13 @@ namespace Project2
             this.total_books = Convert.ToInt32((calendar.Base_Price(calendar.Day())).Item3);
         }
 
+        //The method to be ran by the thread
         public void BookstoreFunction()
         {
             while (true)
             {
-                // Check to see if the publisher has finished with a sleep of 1-2.5 seconds
-                if (Program._stopper.WaitOne(random.Next(1000, 2500), false))
+                // Check to see if the publisher has finished with a sleep of 1-3.5 seconds
+                if (Program._stopper.WaitOne(random.Next(1000, 3500), false))
                 {
                     break;
                 }
@@ -53,6 +54,7 @@ namespace Project2
             Console.WriteLine("TERMINATING: " + Thread.CurrentThread.Name);
         }
 
+        //Creates a new book order given the senderId which is the current thread's name
         public void CreateBookOrder(string senderId)
         {
             lock(COUNT_OBJECT_LOCK)
@@ -63,8 +65,12 @@ namespace Project2
 
                 //Calculate the number of books to be sold for this order
                 int temp = total_books - count_confirmations;
-                order.Amount = (temp / 15);
+                order.Amount = (temp / 30);
                 total_books -= order.Amount;
+
+                //Should not happen, but just in case
+                if (order.Amount < 1)
+                    order.Amount = 1;
 
                 //Card number will be between 100 and 1000
                 order.CardNo = random.Next(100, 1000); //TODO?
@@ -81,12 +87,14 @@ namespace Project2
   
         }
 
+        // Used to handle the event that a sale has happened from a publisher
         public void BookOnSale(int publisherId, double price)
         {
             Console.WriteLine("A SALE IS HAPPENING FROM PUBLISHER #" + publisherId.ToString()
                 + " WITH A NEW LOW PRICE OF: $" + price.ToString("0.00"));
         }
 
+        // Confirms a book order from the publisher
         public static void Confirmation(OrderClass order)
         {
             lock(COUNT_OBJECT_LOCK)

@@ -58,7 +58,7 @@ namespace Project2
         public void PublisherFunction()
         {
 
-            while (p < 5)
+            while (p < 20)
             {
                 Thread.Sleep(random.Next(1500, 4000));
 
@@ -73,7 +73,6 @@ namespace Project2
                     if (new_price < past_price)
                     {
                         p++;
-                        Console.WriteLine("Publisher # " + publisherId + "; P IS : " + p.ToString());
                         Console.Write(">> Price decreased for Publisher # " + publisherId + " from $" + past_price.ToString("0.00") +
                             " to $" + new_price.ToString("0.00") + "\n");
                         past_price = new_price;
