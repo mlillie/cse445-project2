@@ -9,7 +9,7 @@ namespace Project2
     class OrderProcessingThread
     {
         // Tax for final amount
-        public static double tax = 0.0825; 
+        public static double tax = 0.0825;
 
 
         public static void OPT(OrderClass order)

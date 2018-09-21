@@ -10,7 +10,10 @@ namespace Project2
         public delegate void PriceCutEvent(int publisherId, double newPrice);
 
         // We can pass this to the constructor of bookstore and publisher so they can use it
-        private static MultiCellBuffer buffer;
+        private static MultiCellBuffer buffer = new MultiCellBuffer();
+
+        // A manual reset event used for stopping the bookstore when the publishers have all finished
+        public static ManualResetEvent _stopper = new ManualResetEvent(false);
 
         //The publisher threads associated with the entire program.
         private static Thread[] publishers;
@@ -24,23 +27,20 @@ namespace Project2
         //The number of publisher threads
         private const int NUMBER_OF_PUBLISHERS = 2;
 
-        private static Random random = new Random();
-
+        // A boolean array of the current amount of publishers running
         private static Boolean[] publishersRunning;
-
-        public static ManualResetEvent _stopper = new ManualResetEvent(false);
 
         static void Main(string[] args)
         {
-            publishersRunning = new Boolean[NUMBER_OF_PUBLISHERS];
-
-            buffer = new MultiCellBuffer();
-
-            Publisher publisher;
+            // Create bookstore object
             BookStore bookstore = new BookStore(buffer);
 
+            // Add the handler for the price cut event
             Publisher.priceCut += new PriceCutEvent(bookstore.BookOnSale);
 
+            // Creating and starting the publisher threads
+            Publisher publisher;
+            publishersRunning = new Boolean[NUMBER_OF_PUBLISHERS];
             publishers = new Thread[NUMBER_OF_PUBLISHERS];
             for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
             {
@@ -51,6 +51,7 @@ namespace Project2
                 publishersRunning[i] = true;
             }
 
+            // Creates and starting the bookstore threads
             bookstores = new Thread[NUMBER_OF_BOOKSTORES];
             for (int i = 0; i < NUMBER_OF_BOOKSTORES; i ++)
             {
@@ -59,19 +60,9 @@ namespace Project2
                 bookstores[i].Start();
             }
 
-
         }
 
-        public static Thread[] getPublishers()
-        {
-            return publishers;
-        }
-
-        public static Thread[] getBookstores()
-        {
-            return bookstores;
-        }
-
+        // Checks to see if all the publisher threads are still running
         private static Boolean isRunning()
         {
             for (int i = 0; i < NUMBER_OF_PUBLISHERS; i++)
@@ -82,9 +73,11 @@ namespace Project2
             return false;
         }
 
+        //Sets a publishers running value to the given boolean value
         public static void setRunning(int publisherId, Boolean value)
         {
             publishersRunning[publisherId] = value;
+            // If all the publishers have stopped then set the manual reset event to stop the bookstore thread
             if(!isRunning())
             {
                 _stopper.Set();

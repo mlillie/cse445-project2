@@ -30,8 +30,6 @@ namespace Project2
         }
 
         // Created by Jacqueline Fonseca
-
-        //Returns OrderClass object of an order
         public static OrderClass decoder(string orderString)
         {   
             OrderClass orderObject = new OrderClass();

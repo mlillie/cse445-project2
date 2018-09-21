@@ -28,7 +28,7 @@ namespace Project2
         private double discount;
 
         // Will keep track of total number of price cuts
-        private int p; 
+        private int p;
 
         // Will keep track of the previous price (before PriceModel is called)
         private static double past_price;
@@ -39,6 +39,9 @@ namespace Project2
         // ID of the thread
         private int publisherId;
 
+        // Random number generator
+        private Random random;
+
         // Constructor that gets all the stuff
         public Publisher(MultiCellBuffer buffer, int publisherId)
         {
@@ -47,6 +50,7 @@ namespace Project2
             base_price = (c.Base_Price(c.Day())).Item1;
             past_price = base_price;
             discount = (c.Base_Price(c.Day()).Item2);
+            this.random = new Random();
         }
 
 
@@ -56,8 +60,8 @@ namespace Project2
 
             while (p < 5)
             {
-                Thread.Sleep(2000); 
-   
+                Thread.Sleep(random.Next(1500, 4000));
+
                 string s = buffer.ReadFromBuffer(); // Gets order string
                 if (s != null)
                 {

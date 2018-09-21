@@ -6,36 +6,44 @@ namespace Project2
     class BookStore
     {
 
-        //TODO before sending the order to the MultiCellBuffer, a
-        //time stamp must be saved. When the confirmation of order completion is received, the time of the order
-        //will be calculated and saved
-        //DateTime.Now.ToString("hh:mm:ss")
-        //^ Done?
-        
         //Random to be used for generating amounts, numbers, etc
-        private static Random random = new Random();
+        private Random random;
 
         //The buffer that is being passed to this by the main program
         private MultiCellBuffer buffer;
-        static Calendar c = new Calendar();
 
-        private static int total_books = Convert.ToInt32((c.Base_Price(c.Day())).Item3);
+        //The calendar used for gather values.
+        private Calendar calendar;
+
+        //The total books to be sold.
+        private int total_books;
+
+        //The current amount of confirmed orders.
         private static int count_confirmations = 0;
+
+        //This is for accessing the count_confirmations integer
+        private static object COUNT_OBJECT_LOCK = new object();
 
         public BookStore(MultiCellBuffer buffer)
         {
             this.buffer = buffer;
+            this.random = new Random();
+            this.calendar = new Calendar();
+            this.total_books = Convert.ToInt32((calendar.Base_Price(calendar.Day())).Item3);
         }
 
         public void BookstoreFunction()
         {
             while (true)
             {
+                // Check to see if the publisher has finished with a sleep of 1-2.5 seconds
                 if (Program._stopper.WaitOne(random.Next(1000, 2500), false))
                 {
                     break;
                 }
-                if(!buffer.isFull())
+
+                // If the buffer is currently not full, create a book order
+                if (!buffer.IsFull())
                 {
                     string senderId = Thread.CurrentThread.Name;
                     CreateBookOrder(senderId);
@@ -47,42 +55,46 @@ namespace Project2
 
         public void CreateBookOrder(string senderId)
         {
-            OrderClass order = new OrderClass();
-            order.SenderId = senderId;
-            //order.ReceiverId = receiverId; // This can be set when the publisher actually receivs the order
-            
-       
-            int temp = total_books - count_confirmations;
-            order.Amount = (temp / 15);
-            total_books -= order.Amount;
-        
-            //order.Amount =  (200-count_confirmations);//TODO amount has to change dynamically based on needs?
-            Console.Write("BOOKS:::::: " + order.Amount);
-            order.CardNo = random.Next(100, 1000); //TODO?
-            order.ReceiverId = "TODO";
-            order.Unit_Price = 0.0;
-            //order.UnitPrice = price; TODO set the price when the publisher recieves the order from the buffer so,
-            // it can update the price counter and possibly change the price
+            lock(COUNT_OBJECT_LOCK)
+            {
+                //Create an oorder object
+                OrderClass order = new OrderClass();
+                order.SenderId = senderId;
 
-            //Encode and send to the buffer here
-           string encodedOrder = Cipher.encoder(order);
-           Console.WriteLine("Before write buffer: " + Thread.CurrentThread.Name);
-           buffer.WriteToBuffer(encodedOrder);
-           Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by sender " + senderId + ".");
+                //Calculate the number of books to be sold for this order
+                int temp = total_books - count_confirmations;
+                order.Amount = (temp / 15);
+                total_books -= order.Amount;
+
+                //Card number will be between 100 and 1000
+                order.CardNo = random.Next(100, 1000); //TODO?
+
+                // Place holders as these will be set once the publisher receives it 
+                order.ReceiverId = "TODO";
+                order.Unit_Price = 0.0;
+
+                //Encode and send to the buffer here
+                string encodedOrder = Cipher.encoder(order);
+                buffer.WriteToBuffer(encodedOrder);
+                Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by sender " + senderId + ".");
+            }
+  
         }
 
         public void BookOnSale(int publisherId, double price)
         {
-            Console.WriteLine("A SALE IS HAPPENING FROM PUBLISHER #"+ publisherId.ToString() 
-                +" WITH A NEW LOW PRICE OF: $" + price.ToString("0.00"));
+            Console.WriteLine("A SALE IS HAPPENING FROM PUBLISHER #" + publisherId.ToString()
+                + " WITH A NEW LOW PRICE OF: $" + price.ToString("0.00"));
         }
 
         public static void Confirmation(OrderClass order)
         {
-            Console.Write("Order from " + order.ReceiverId + " with " + order.Amount + " book(s) has been approved.\n");
-            count_confirmations++;
-            Console.Write(count_confirmations);
-        }      
-        
+            lock(COUNT_OBJECT_LOCK)
+            {
+                Console.Write("Order from " + order.ReceiverId + " with " + order.Amount + " book(s) has been approved.\n");
+                count_confirmations++;
+            }
+        }
+
     }
 }

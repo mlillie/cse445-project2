@@ -25,8 +25,6 @@ namespace Project2
 
         public void WriteToBuffer(string value)
         {
-            Console.WriteLine("START WRITE");
-
             //Wait for a spot to be open
             semaphore.WaitOne();
             lock (BUFFER_LOCK) // Lock the buffer since we are now attempting to write to it
@@ -43,8 +41,6 @@ namespace Project2
                     }
                 }
             }
-
-            Console.WriteLine("END WRTITE");
         }
 
         public string ReadFromBuffer()
@@ -69,7 +65,8 @@ namespace Project2
             return value;
         }
 
-        public Boolean isFull()
+        // Determines whether or not the buffer is currently full or not
+        public Boolean IsFull()
         {
             lock(BUFFER_LOCK)
             {

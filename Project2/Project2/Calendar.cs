@@ -50,8 +50,8 @@ namespace Project2
             values[4][2] = 275;
             values[5][2] = 280;
             values[6][2] = 280;
-        
-           return Tuple.Create(values[day_of_the_week][0], values[day_of_the_week][1], values[day_of_the_week][2]);
+
+            return Tuple.Create(values[day_of_the_week][0], values[day_of_the_week][1], values[day_of_the_week][2]);
         }
 
         // Returns day of the week; to be used to get values from the Calendar
