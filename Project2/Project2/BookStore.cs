@@ -35,6 +35,8 @@ namespace Project2
         //The method to be ran by the thread
         public void BookstoreFunction()
         {
+
+            Console.WriteLine(Thread.CurrentThread.Name + " has opened!");
             while (true)
             {
                 // Check to see if the publisher has finished with a sleep of 1-3.5 seconds
@@ -51,7 +53,7 @@ namespace Project2
                 }
             }
 
-            Console.WriteLine("TERMINATING: " + Thread.CurrentThread.Name);
+            Console.WriteLine(Thread.CurrentThread.Name + " has closed!");
         }
 
         //Creates a new book order given the senderId which is the current thread's name
@@ -82,7 +84,7 @@ namespace Project2
                 //Encode and send to the buffer here
                 string encodedOrder = Cipher.encoder(order);
                 buffer.WriteToBuffer(encodedOrder);
-                Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by sender " + senderId + ".");
+                Console.WriteLine("Order has been created at " + DateTime.Now.ToString("hh:mm:ss") + " by " + senderId + ".");
             }
   
         }
@@ -99,7 +101,11 @@ namespace Project2
         {
             lock(COUNT_OBJECT_LOCK)
             {
-                Console.Write("Order from " + order.ReceiverId + " with " + order.Amount + " book(s) has been approved.\n");
+                Console.WriteLine("\n\n\t Order by " + order.SenderId + " has been received by " + order.ReceiverId + " and confirmed! The details are: ");
+                Console.WriteLine("\t Unit price: $" + order.Unit_Price.ToString("0.00"));
+                Console.WriteLine("\t Amount: " + order.Amount.ToString());
+                Console.WriteLine("\t CC number: " + order.CardNo.ToString() + "\n\n");
+            
                 count_confirmations++;
             }
         }

@@ -57,7 +57,7 @@ namespace Project2
         // Function for starting the threads in Program
         public void PublisherFunction()
         {
-
+            Console.WriteLine(Thread.CurrentThread.Name + " has opened!");
             while (p < 20)
             {
                 Thread.Sleep(random.Next(1500, 4000));
@@ -100,7 +100,7 @@ namespace Project2
                     t.Start();
                 }
             }
-            Console.Write(Thread.CurrentThread.Name.ToString() + " is terminating.\n");
+            Console.WriteLine(Thread.CurrentThread.Name + " has closed!");
             Program.setRunning(publisherId, false);
         }
 

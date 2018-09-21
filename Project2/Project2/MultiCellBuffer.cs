@@ -29,6 +29,12 @@ namespace Project2
             semaphore.WaitOne();
             lock (BUFFER_LOCK) // Lock the buffer since we are now attempting to write to it
             {
+                //Wait while the buffer is full
+                while (currentBufferSize == MAXIMUM_BUFFER_SIZE)
+                {
+                    Monitor.Wait(BUFFER_LOCK);
+                }
+
                 //Find the first value that is null in the buffer and set it to be the new value
                 //Then increase the current size of the buffer
                 for (int i = 0; i < MAXIMUM_BUFFER_SIZE; i++)
@@ -40,6 +46,8 @@ namespace Project2
                         break;
                     }
                 }
+
+                Monitor.Pulse(BUFFER_LOCK);
             }
         }
 
@@ -48,10 +56,17 @@ namespace Project2
             string value = null;
             lock(BUFFER_LOCK) // Lock the buffer because we are now attempting to read from it
             {
+                //Wait while the buffer is empty
+                while (currentBufferSize == 0)
+                {
+                    Monitor.Wait(BUFFER_LOCK);
+                }
+
                 //Find the first non null value in the buffer and use that as the return value
                 //Then decrement the current size of the buffer
                 for (int i = 0; i < MAXIMUM_BUFFER_SIZE; i++)
-                {
+                {   
+
                     if (buffer[i] != null)
                     {
                         value = buffer[i];
@@ -60,7 +75,9 @@ namespace Project2
                         semaphore.Release();
                         break;
                     }
+           
                 }
+                Monitor.Pulse(BUFFER_LOCK);
             }
             return value;
         }
