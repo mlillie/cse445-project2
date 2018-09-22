@@ -4,7 +4,6 @@ using System.Threading;
 namespace Project2
 {
 
-    // Created by: Matthew Lillie on 09/05/2018
     class MultiCellBuffer
     {
         // Constants for the buffer
@@ -23,12 +22,14 @@ namespace Project2
             this.buffer = new string[MAXIMUM_BUFFER_SIZE];
         }
 
+        //Created by Matthew Lillie
         public void WriteToBuffer(string value)
         {
-            //Wait for a spot to be open
-            semaphore.WaitOne();
             lock (BUFFER_LOCK) // Lock the buffer since we are now attempting to write to it
             {
+                //Wait for a spot to be open
+                semaphore.WaitOne();
+
                 //Wait while the buffer is full
                 while (currentBufferSize == MAXIMUM_BUFFER_SIZE)
                 {
@@ -51,6 +52,7 @@ namespace Project2
             }
         }
 
+        // Created by Jacqueline Fonseca
         public string ReadFromBuffer()
         {
             string value = null;
@@ -83,6 +85,7 @@ namespace Project2
         }
 
         // Determines whether or not the buffer is currently full or not
+        // Created by Jacqueline Fonseca/Matthew Lillie
         public Boolean IsFull()
         {
             lock(BUFFER_LOCK)

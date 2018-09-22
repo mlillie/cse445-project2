@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project2
 {
+    // Created by Jacqueline Fonseca
     class OrderProcessingThread
     {
         // Tax for final amount

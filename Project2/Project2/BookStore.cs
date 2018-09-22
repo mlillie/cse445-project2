@@ -3,6 +3,7 @@ using System.Threading;
 
 namespace Project2
 {
+    // Created by Matthew Lillie
     class BookStore
     {
 
@@ -75,7 +76,7 @@ namespace Project2
                     order.Amount = 1;
 
                 //Card number will be between 100 and 1000
-                order.CardNo = random.Next(100, 1000); //TODO?
+                order.CardNo = random.Next(100, 1000);
 
                 // Place holders as these will be set once the publisher receives it 
                 order.ReceiverId = "TODO";
